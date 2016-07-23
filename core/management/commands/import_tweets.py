@@ -39,29 +39,30 @@ def import_multiple(lst, model, foreign_key_value=None):
 def import_single(dictionary, model, foreign_key_value=None):
     print(model)
     m = model()
-    child_models = []
     for field, value in dictionary.items():
         if field in ignore_fields:
             continue
         elif field == 'entities':
             for entity_name, entity_list in dictionary['entities'].items():
-                child_models.extend(import_multiple(entity_list, one_to_many[entity_name]))
+                import_multiple(entity_list, one_to_many[entity_name])
         elif field in one_to_many:
-            child_models.extend(import_multiple(value, one_to_many[field], foreign_key_value=dictionary[id]))
+            import_multiple(value, one_to_many[field], foreign_key_value=dictionary[id])
+        elif field in one_to_one:
+            import_single(value, one_to_one[field], foreign_key_value=dictionary[id])
         elif field == 'id':
-            settatr(m, id_fields[model], value)
+            setattr(m, id_fields[model], value)
         else:
             setattr(m, field, value)
-    #m.save()
-    for child_models in child_model:
-        child_model.save()
     return m
 
 
 with open("tweets.json", 'r') as tweets_file:
     tweet_data = json.loads(tweets_file.read())
     line = 1
+    tweet_models = []
     for tweet_datum in tweet_data:
         print(line)
         line = line + 1
-        import_single(tweet_datum, models.Tweet)
+        tweet_models.extend(import_single(tweet_datum, models.Tweet))
+    for tweet in tweet_models:
+        tweet.save()
