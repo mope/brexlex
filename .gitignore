@@ -1,0 +1,4 @@
+/.vagrant
+/static
+*.pyc
+/brexlex/settings/local.py
