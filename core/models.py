@@ -7,9 +7,9 @@ from django.db import models
 
 class User(models.Model):
     user_id = models.BigIntegerField()
-    name = models.CharField()
-    screen_name = models.CharField()
-    location = models.CharField()
+    name = models.CharField(max_length=255)
+    screen_name = models.CharField(max_length=255)
+    location = models.CharField(max_length=255)
     url = models.URLField()
     description = models.CharField(max_length=511)
     protected = models.BooleanField(default=False)
@@ -20,26 +20,26 @@ class User(models.Model):
     favourites_count = models.IntegerField()
     statuses_count = models.IntegerField()
     created_at = models.DateTimeField()
-    time_zone = models.CharField()
+    time_zone = models.CharField(max_length=255)
     geo_enabled = models.BooleanField()
     contributors_enabled = models.BooleanField()
     is_translator = models.BooleanField()
-    profile_background_color = models.CharField()
+    profile_background_color = models.CharField(max_length=255)
     profile_background_image_url = models.URLField()
     profile_background_image_url_https = models.URLField()
     profile_background_tile = models.BooleanField()
-    profile_background_link_color = models.CharField()
-    profile_sidebar_border_color = models.CharField()
-    profile_sidebar_fill_color = models.CharField()
-    profile_text_color = models.CharField()
+    profile_background_link_color = models.CharField(max_length=255)
+    profile_sidebar_border_color = models.CharField(max_length=255)
+    profile_sidebar_fill_color = models.CharField(max_length=255)
+    profile_text_color = models.CharField(max_length=255)
     profile_use_background_image = models.BooleanField()
     profile_image_url = models.URLField()
     profile_image_url_https = models.URLField()
     default_profile = models.BooleanField()
     default_profile_image = models.BooleanField()
-    following = models.CharField()
-    follow_request_sent = models.CharField()
-    notifications = models.CharField()
+    following = models.CharField(max_length=255)
+    follow_request_sent = models.CharField(max_length=255)
+    notifications = models.CharField(max_length=255)
 
 
 class Hashtag(models.Model):
@@ -49,8 +49,8 @@ class Hashtag(models.Model):
         related_name='hashtags'
     )
     text = models.CharField(max_length=255)
-    index_1 = models.IntegerField(required=False)
-    index_2 = models.IntegerField(required=False)
+    index_1 = models.IntegerField(blank=True, null=True)
+    index_2 = models.IntegerField(blank=True, null=True)
 
 
 class Url(models.Model):
@@ -62,8 +62,8 @@ class Url(models.Model):
     url = models.URLField()
     expanded_url = models.URLField()
     display_url = models.URLField()
-    index_1 = models.IntegerField(required=False)
-    index_2 = models.IntegerField(required=False)
+    index_1 = models.IntegerField(blank=True, null=True)
+    index_2 = models.IntegerField(blank=True, null=True)
 
 
 class MediaSize(models.Model):
@@ -72,10 +72,10 @@ class MediaSize(models.Model):
         on_delete=models.CASCADE,
         related_name='sizes'
     )
-    name = models.CharField()
+    name = models.CharField(max_length=255)
     w = models.IntegerField()
     h = models.IntegerField()
-    resize = models.CharField()
+    resize = models.CharField(max_length=255)
 
 
 class Media(models.Model):
@@ -85,34 +85,34 @@ class Media(models.Model):
         related_name='media'
     )
     media_id = models.BigIntegerField()
-    index_1 = models.IntegerField(required=False)
-    index_2 = models.IntegerField(required=False)
+    index_1 = models.IntegerField(blank=True, null=True)
+    index_2 = models.IntegerField(blank=True, null=True)
     media_url = models.URLField()
     media_url_https = models.URLField()
     url = models.URLField()
     display_url = models.URLField()
     extended_url = models.URLField()
-    type = models.CharField()
+    type = models.CharField(max_length=255)
 
 
 class Tweet(models.Model):
     created_at = models.DateTimeField()
     tweet_id = models.BigIntegerField()
-    text = models.CharField()
-    source = models.CharField()
+    text = models.CharField(max_length=255)
+    source = models.CharField(max_length=255)
     truncated = models.BooleanField(default=False)
-    in_reply_to_status_id = models.BigIntegerField(required=False)
-    in_reply_to_user_id = models.BigIntegerField(required=False)
-    in_reply_to_screen_name = models.CharField(required=False)
+    in_reply_to_status_id = models.BigIntegerField(blank=True, null=True)
+    in_reply_to_user_id = models.BigIntegerField(blank=True, null=True)
+    in_reply_to_screen_name = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey(
         'core.User',
         on_delete=models.CASCADE,
         related_name='tweets'
     )
-    geo = models.CharField(required=False)
-    coordinates = models.CharField(required=False)
-    place = models.CharField(required=False)
-    contributors = models.CharField(required=False)
+    geo = models.CharField(max_length=255, blank=True, null=True)
+    coordinates = models.CharField(max_length=255, blank=True, null=True)
+    place = models.CharField(max_length=255, blank=True, null=True)
+    contributors = models.CharField(max_length=255, blank=True, null=True)
     retweeted_status = models.ForeignKey(
         'core.Tweet',
         null=True, blank=True,
@@ -120,7 +120,7 @@ class Tweet(models.Model):
         related_name='retweets'
     )
     is_quote_status = models.BooleanField(default=False)
-    quoted_status_id = models.BigIntegerField(required=False)
+    quoted_status_twitter_id = models.BigIntegerField(null=True, blank=True)
     quoted_status = models.ForeignKey(
         'core.Tweet',
         null=True, blank=True,
@@ -132,6 +132,6 @@ class Tweet(models.Model):
     favorited = models.BooleanField(default=False)
     retweeted = models.BooleanField(default=False)
     possibly_sensitive = models.BooleanField(default=False)
-    filter_level = models.CharField(required=False)
-    lang = models.CharField(required=False)
-    timestamp_ms = models.CharField()
+    filter_level = models.CharField(max_length=255, blank=True, null=True)
+    lang = models.CharField(max_length=255, blank=True, null=True)
+    timestamp_ms = models.CharField(max_length=255, blank=True, null=True)
