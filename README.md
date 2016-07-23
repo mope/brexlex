@@ -35,3 +35,9 @@ See also
 https://github.com/torchbox/vagrant-django-base - a recipe for a Vagrant base box that can be used in place of precise32
 in the Vagrantfile - this has more of the server setup baked in, so that we can save time by not having to re-run those
 steps every time we create a new VM instance.
+
+
+Put this in .bashrc:
+
+export PYTHONPATH=/home/vagrant/brexlex
+export DJANGO_SETTINGS_MODULE=brexlex.settings.dev
