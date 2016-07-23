@@ -95,6 +95,19 @@ class Media(models.Model):
     type = models.CharField(max_length=255)
 
 
+class UserMention(models.Model):
+    tweet = models.ForeignKey(
+        'core.Tweet',
+        on_delete=models.CASCADE,
+        related_name='mentions'
+    )
+    screen_name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    mention_id = models.BigIntegerField()
+    index_1 = models.IntegerField(blank=True, null=True)
+    index_2 = models.IntegerField(blank=True, null=True)
+
+
 class Tweet(models.Model):
     created_at = models.DateTimeField()
     tweet_id = models.BigIntegerField()
