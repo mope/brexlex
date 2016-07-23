@@ -66,7 +66,7 @@ class Url(models.Model):
     index_2 = models.IntegerField(blank=True, null=True)
 
 
-class MediaSize(models.Model):
+class Size(models.Model):
     media = models.ForeignKey(
         'core.Tweet',
         on_delete=models.CASCADE,
