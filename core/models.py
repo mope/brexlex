@@ -103,7 +103,7 @@ class UserMention(models.Model):
     )
     screen_name = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
-    mention_id = models.BigIntegerField()
+    user_mention_id = models.BigIntegerField()
     index_1 = models.IntegerField(blank=True, null=True)
     index_2 = models.IntegerField(blank=True, null=True)
 
