@@ -83,18 +83,10 @@ class Size(models.Model):
     w = models.IntegerField()
     h = models.IntegerField()
     resize = models.CharField(max_length=255)
-
-
-class MediaSize(models.Model):
     media = models.ForeignKey(
         'core.Tweet',
         on_delete=models.CASCADE,
         related_name='sizes'
-    )
-    size = models.ForeignKey(
-        'core.size',
-        on_delete=models.CASCADE,
-        related_name='media'
     )
 
 

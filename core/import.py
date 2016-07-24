@@ -1,6 +1,8 @@
 import json
 
-from . import models
+from django.core.management.base import BaseCommand
+
+from ...core import models
 
 
 ignore_fields = [
@@ -40,10 +42,13 @@ def import_single(dictionary, model):
         if field in one_to_many:
             import_multiple(value, one_to_many[field])
         else:
-            setattr(model, field, value)
+            setattr(m, field, value)
+    m.save()
 
 
-with open("tweets.json", 'r') as tweets_file:
-    tweet_data = json.loads(tweets_file)
-    for tweet_datum in tweet_data:
-        import_single(tweet_data, models.Tweet)
+class Command(BaseCommand):
+    def handle(self, **options):
+        with open("tweets.json", 'r') as tweets_file:
+            tweet_data = json.loads(tweets_file)
+            for tweet_datum in tweet_data:
+                import_single(tweet_data, models.Tweet)
