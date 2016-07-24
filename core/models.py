@@ -1,10 +1,6 @@
 from django.db import models
 
 
-# IDs are different
-# ID strings aren't used
-# in_reply_to_status_id_str not used
-
 class User(models.Model):
     user_id = models.BigIntegerField()
     name = models.CharField(max_length=255)
@@ -43,39 +39,63 @@ class User(models.Model):
 
 
 class Hashtag(models.Model):
+    text = models.CharField(max_length=255)
+
+
+class TweetHashtag(models.Model):
     tweet = models.ForeignKey(
         'core.Tweet',
         on_delete=models.CASCADE,
         related_name='hashtags'
     )
-    text = models.CharField(max_length=255)
+    hashtag = models.ForeignKey(
+        'core.Hashtag',
+        on_delete=models.CASCADE,
+        related_name='tweets'
+    )
     index_1 = models.IntegerField(blank=True, null=True)
     index_2 = models.IntegerField(blank=True, null=True)
 
 
 class Url(models.Model):
+    url = models.URLField()
+    expanded_url = models.URLField()
+    display_url = models.URLField()
+
+
+class TweetUrl(models.Model):
     tweet = models.ForeignKey(
         'core.Tweet',
         on_delete=models.CASCADE,
         related_name='urls'
     )
-    url = models.URLField()
-    expanded_url = models.URLField()
-    display_url = models.URLField()
+    url = models.ForeignKey(
+        'core.Url',
+        on_delete=models.CASCADE,
+        related_name='tweets'
+    )
     index_1 = models.IntegerField(blank=True, null=True)
     index_2 = models.IntegerField(blank=True, null=True)
 
 
 class Size(models.Model):
+    name = models.CharField(max_length=255)
+    w = models.IntegerField()
+    h = models.IntegerField()
+    resize = models.CharField(max_length=255)
+
+
+class MediaSize(models.Model):
     media = models.ForeignKey(
         'core.Tweet',
         on_delete=models.CASCADE,
         related_name='sizes'
     )
-    name = models.CharField(max_length=255)
-    w = models.IntegerField()
-    h = models.IntegerField()
-    resize = models.CharField(max_length=255)
+    size = models.ForeignKey(
+        'core.size',
+        on_delete=models.CASCADE,
+        related_name='media'
+    )
 
 
 class Media(models.Model):
@@ -96,14 +116,22 @@ class Media(models.Model):
 
 
 class UserMention(models.Model):
+    screen_name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    user_mention_id = models.BigIntegerField()
+
+
+class TweetUserMentions(models.Model):
     tweet = models.ForeignKey(
         'core.Tweet',
         on_delete=models.CASCADE,
         related_name='mentions'
     )
-    screen_name = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    user_mention_id = models.BigIntegerField()
+    user_mention = models.ForeignKey(
+        'core.UserMention',
+        on_delete=models.CASCADE,
+        related_name='mentions'
+    )
     index_1 = models.IntegerField(blank=True, null=True)
     index_2 = models.IntegerField(blank=True, null=True)
 
